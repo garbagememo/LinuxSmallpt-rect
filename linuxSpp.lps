@@ -18,8 +18,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="RenderUnit"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="140"/>
-        <CursorPos X="98" Y="144"/>
+        <TopLine Value="151"/>
+        <CursorPos X="2" Y="171"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -31,7 +31,7 @@
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit2>
     </Units>
-    <JumpHistory Count="6" HistoryIndex="5">
+    <JumpHistory Count="14" HistoryIndex="13">
       <Position1>
         <Filename Value="renderunit.pas"/>
       </Position1>
@@ -55,6 +55,38 @@
         <Filename Value="renderunit.pas"/>
         <Caret Line="157" Column="63" TopLine="139"/>
       </Position6>
+      <Position7>
+        <Filename Value="renderunit.pas"/>
+        <Caret Line="144" Column="98" TopLine="139"/>
+      </Position7>
+      <Position8>
+        <Filename Value="renderunit.pas"/>
+        <Caret Line="145" Column="98" TopLine="140"/>
+      </Position8>
+      <Position9>
+        <Filename Value="renderunit.pas"/>
+        <Caret Line="143" Column="59" TopLine="141"/>
+      </Position9>
+      <Position10>
+        <Filename Value="renderunit.pas"/>
+        <Caret Line="138" Column="49" TopLine="126"/>
+      </Position10>
+      <Position11>
+        <Filename Value="renderunit.pas"/>
+        <Caret Line="79" Column="59" TopLine="66"/>
+      </Position11>
+      <Position12>
+        <Filename Value="renderunit.pas"/>
+        <Caret Line="138" Column="62" TopLine="126"/>
+      </Position12>
+      <Position13>
+        <Filename Value="renderunit.pas"/>
+        <Caret Line="49" Column="14" TopLine="49"/>
+      </Position13>
+      <Position14>
+        <Filename Value="renderunit.pas"/>
+        <Caret Line="147" Column="23" TopLine="135"/>
+      </Position14>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

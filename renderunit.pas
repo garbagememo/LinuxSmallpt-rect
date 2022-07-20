@@ -31,6 +31,7 @@ TThreadクラスのプロパティのonTerminateをtrueにしておくとループから脱出すると
 }
 unit RenderUnit;
 {$mode objfpc}{$H+}
+{$modeswitch advancedrecords}
 
 
 
@@ -40,14 +41,12 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls;
 
 const
-  MaxThread=4;
+  MaxThreadNum=4;
 type
+ 
+  TLineBuffer=array[0..2000] of record r,g,b:byte; end;
 
   { TMyThread }
-
-  TLineBuffer=array[0..2000] of record r,g,b:byte; end;
- 
-
   TMyThread = class(TThread)
   private
     fStatusText: string;
@@ -64,10 +63,20 @@ type
     constructor Create(CreateSuspended: boolean);
   end;
 
+  {ThreadList}
+  ThreadListRecord=Record
+    Ary:array[0..MaxThreadNum-1] of TMyThread;
+    MaxThread:integer;
+    procedure ClearList;
+    procedure Add(Th:TMyThread);
+    function GetThread(i:integer):TMyThread;
+  end;
   { TRenderForm }
 
   TRenderForm = class(TForm)
     AlgoCombo: TComboBox;
+    ThreadEdit: TEdit;
+    Thread: TLabel;
     SaveBotton: TButton;
     RenderButton: TButton;
     ComboBox1: TComboBox;
@@ -85,7 +94,7 @@ type
     procedure RenderSetup;
   private
     MinimamHeight:integer;
-    RTAry : array[0..MaxThread-1] of TMyThread;
+    ThreadList : ThreadListRecord;
   public
     yAxis:integer;
   end;
@@ -96,6 +105,22 @@ var
 implementation
 
 {$R *.lfm}
+
+procedure ThreadListRecord.ClearList;
+begin
+  MaxThread:=-1;
+end;
+procedure ThreadListRecord.Add(Th:TMyThread);
+begin
+  if MaxThread<MaxThreadNum-1 then inc(MaxThread) else exit;
+  ary[MaxThread]:=Th;
+end;
+function ThreadListRecord.GetThread(i:integer):TMyThread;
+begin
+  if i<=MaxThread then result:=Ary[i] else result:=nil;
+end;
+
+
 
 { TRenderForm }
 
@@ -110,17 +135,20 @@ var
   i:integer;
 begin
   RenderSetup;
-  for i:=0 to MaxThread-1 do RTAry[i].Start;
+  for i:=0 to ThreadList.MaxThread do ThreadList.GetThread(i).Start;
 end;
 
 procedure TRenderForm.RenderSetup;
 var
   i:integer;
   MyThread:TMyThread;
+  ThreadNum:integer;
 begin
+  ThreadList.ClearList;//この時点ではスレッドが常に無い状態なのでClearで問題ない　onTerminate=TRUEなので
   yAxis:=-1;
   imgRender.Width := strtoint(WidthEdit.Text);
   imgRender.Height := strtoint(HeightEdit.Text);
+  ThreadNum:=StrToInt(ThreadEdit.text);
   //add
   imgRender.Picture.Bitmap.Width:=imgRender.Width;
   imgRender.Picture.Bitmap.Height:=imgRender.Height;
@@ -132,15 +160,15 @@ begin
   IF (ImgRender.Top+5+ImgRender.Height) >MinimamHeight THEN
     ClientHeight := imgRender.Top + 5 + imgRender.Height;
 
-  for i:=0 to MaxThread-1 do begin
+  for i:=0 to ThreadNum-1 do begin
     MyThread:=TMyThread.Create(True); // With the True parameter it doesnot start automatically
     if Assigned(MyThread.FatalException) then
       raise MyThread.FatalException;
-    RTAry[i] :=MyThread; 
-    RTAry[i].wide:=imgRender.Width;
-    RTAry[i].h:=imgRender.height;
+    MyThread.wide:=imgRender.Width;
+    MyThread.h:=imgRender.Height;
     Inc(yAxis);
-    RTAry[i].yRender:=yAxis;
+    MyThread.yRender:=yAxis;
+    ThreadList.add(MyThread);
   end;
   
 end;
