@@ -45,7 +45,7 @@ const
   MaxThreadNum=4;
 type
  
-  TLineBuffer=array[0..2000] of record r,g,b:byte; end;
+  TLineBuffer=array[0..2000] of VecRecord;
 
   { TMyThread }
   TMyThread = class(TThread)
@@ -60,7 +60,9 @@ type
   public
     LineBuffer:TLineBuffer;
     wide,h,samps:INTEGER;
+    ModelID:integer;
     yRender:integer;
+    tCam:CameraRecord;
     FLx:TFluxClass;
     constructor Create(CreateSuspended: boolean);
   end;
@@ -142,7 +144,7 @@ end;
 
 procedure TRenderForm.RenderSetup;
 var
-  i:integer;
+  i,samps:integer;
   MyThread:TMyThread;
   ThreadNum:integer;
 begin
@@ -151,6 +153,7 @@ begin
   imgRender.Width := strtoint(WidthEdit.Text);
   imgRender.Height := strtoint(HeightEdit.Text);
   ThreadNum:=StrToInt(ThreadEdit.text);
+  samps:=StrToInt(SamplesEdit.text);
   //add
   imgRender.Picture.Bitmap.Width:=imgRender.Width;
   imgRender.Picture.Bitmap.Height:=imgRender.Height;
@@ -170,6 +173,9 @@ begin
     MyThread.h:=imgRender.Height;
     Inc(yAxis);
     MyThread.yRender:=yAxis;
+    MyThread.FLx:=TFluxClass.Create;
+    MyThread.ModelID:=1;
+    MyThread.samps:=samps;
     ThreadList.add(MyThread);
   end;
   
@@ -180,10 +186,12 @@ end;
 procedure TMyThread.InitRend;
 var
   i:integer;
+  SceneRec:SceneRecord;
 begin
-  for i:=0 to 2000 do begin
-    LineBuffer[i].r:=0;LineBuffer[i].g:=0;LineBuffer[i].b:=0;
-  end;
+  SRList.InitSceneRecord(wide,h);
+  SceneRec:=SRList.GetScene(ModelID);
+  mdl:=SceneRec.mdl;
+  cam:=SceneRec.cam;
 end;
 
 procedure TMyThread.DoRend;
@@ -191,10 +199,10 @@ var
   x:integer;
 begin
    for x:=0 to wide-1 do begin
-      RenderForm.ImgRender.Canvas.Pixels[x,yRender]:=
-   	     LineBuffer[x].r+         //red
-         LineBuffer[x].g*256+     //green
-         LineBuffer[x].b*256*256; //blune
+     RenderForm.ImgRender.Canvas.Pixels[x,yRender]:=
+ 	     ColToByte(LineBuffer[x].x)+         //red
+         ColToByte(LineBuffer[x].y)*256+     //green
+         ColToByte(LineBuffer[x].z)*256*256; //blune
    end;
    Inc(RenderForm.yAxis);
    yRender:=RenderForm.yAxis;
@@ -216,25 +224,36 @@ end;
 procedure TMyThread.Execute;
 var
   newStatus : string;
-  y,x:integer;
+  y,x,sx,sy,s:integer;
+  temp       : VecRecord;
+  tColor,r : VecRecord;
 begin
   fStatusText := 'TMyThread Starting ...';
   Synchronize(@Showstatus);
   Synchronize(@initRend);
   fStatusText := 'TMyThread Running ...';
-  while  yRender<h do begin
+  while y<h do begin
     for x:=0 to wide-1 do begin
-      LineBuffer[x].r:=x mod 255;
-      LineBuffer[x].g:=RenderForm.yAxis mod 255;
-      LineBuffer[x].b:=128;
-      newStatus:='TMyThread Time: '+FormatDateTime('YYYY-MM-DD HH:NN:SS',Now);
-    end;
-    if NewStatus <> fStatusText then begin
-      fStatusText := newStatus;
-      Synchronize(@Showstatus);
-    end;
+      r:=CreateVec(0, 0, 0);
+      tColor:=ZeroVec;
+      for sy:=0 to 1 do begin
+        for sx:=0 to 1 do begin
+          for s:=0 to samps do begin
+            temp:=FLx.Radiance(Cam.Ray(x,y,sx,sy),0);
+            temp:= temp/ samps;
+            r:= r+temp;
+          end;(*samps*)
+          temp:= ClampVector(r)* 0.25;
+          tColor:=tColor+ temp;
+          r:=CreateVec(0, 0, 0);
+	    end;(*sx*)
+      end;(*sy*)
+      LineBuffer[x]:=tColor;
+    end;(*x*)
+    fStatusText:='y='+IntToStr(y);
     Synchronize(@DoRend);
-  end;
+    y:=yRender;
+  end;(*y*)
   fStatusText:='TMyThread is End';
   Synchronize(@RendDone);
 end;

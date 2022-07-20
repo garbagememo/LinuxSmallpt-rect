@@ -30,6 +30,7 @@ type
      end;
    function CreateRay(o_,d_:VecRecord):RayRecord;
 
+   function ColToByte(x:real):byte;inline;
    function ClampVector(v:VecRecord):VecRecord;
    function ColToRGB(v:VecRecord):rgbColor;
 const
