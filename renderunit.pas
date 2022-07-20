@@ -23,10 +23,16 @@
     thread.
     Important: The cthread unint must be added to the uses section of the .lpr
                file. See multithreadingexample1.lpr.
+
+TThreadクラスのプロパティのonTerminateをtrueにしておくとループから脱出すると
+開放処理されるがインスタンスは残っているので不正アクセスの温床になるため
+自分でMyThreadにNILを代入するべき。今回は外側にフラグをもっておいて、
+外側でCreateする処理にした
 }
 unit RenderUnit;
-
 {$mode objfpc}{$H+}
+
+
 
 interface
 
@@ -73,8 +79,11 @@ type
     Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure RenderButtonClick(Sender: TObject);
+    procedure RenderSetup;
   private
+    MinimamHeight:integer;
     MyThread : TMyThread;
+    isMyThreadAlive:boolean;
   public
     yAxis:integer;
   end;
@@ -90,18 +99,42 @@ implementation
 
 procedure TRenderForm.FormCreate(Sender: TObject);
 begin
-  MyThread := TMyThread.Create(True); // With the True parameter it doesnot start automatically
-  if Assigned(MyThread.FatalException) then
-    raise MyThread.FatalException;
-      
   // Here the code initialises anything required before the threads starts executing
-
-
+  MinimamHeight:=Height;
+  isMyThreadAlive:=FALSE;
 end;
 
 procedure TRenderForm.RenderButtonClick(Sender: TObject);
 begin
+  RenderSetup;
   MyThread.Start;
+end;
+
+procedure TRenderForm.RenderSetup;
+begin
+  IF isMyThreadAlive THEN BEGIN
+    MyThread.Destroy;
+  END;
+  MyThread := TMyThread.Create(True); // With the True parameter it doesnot start automatically
+  isMyThreadAlive:=TRUE;
+
+  if Assigned(MyThread.FatalException) then
+    raise MyThread.FatalException;
+  imgRender.Width := strtoint(WidthEdit.Text);
+  imgRender.Height := strtoint(HeightEdit.Text);
+  //add
+  imgRender.Picture.Bitmap.Width:=imgRender.Width;
+  imgRender.Picture.Bitmap.Height:=imgRender.Height;
+  //Orginal source
+  imgRender.Canvas.Brush.Color := clBlack;
+  imgRender.Canvas.FillRect(0,0, imgRender.Width, imgRender.Height);
+
+  ClientWidth := imgRender.Left + 5 + imgRender.Width;
+  IF (ImgRender.Top+5+ImgRender.Height) >MinimamHeight THEN
+    ClientHeight := imgRender.Top + 5 + imgRender.Height;
+
+  MyThread.wide:=imgRender.Width;
+  MyThread.h:=imgRender.height;
 end;
 
 { TMyThread }
@@ -120,7 +153,7 @@ procedure TMyThread.DoRend;
 var
   x:integer;
 begin
-   for x:=0 to 319 do begin
+   for x:=0 to wide-1 do begin
       RenderForm.ImgRender.Canvas.Pixels[x,RenderForm.yAxis]:=
    	     LineBuffer[x].r+         //red
          LineBuffer[x].g*256+     //green
@@ -132,7 +165,7 @@ end;
 
 procedure TMyThread.RendDone;
 begin
-
+  RenderForm.isMyThreadAlive:=FALSE;
 end;
 
 procedure TMyThread.ShowStatus;
@@ -150,11 +183,14 @@ var
 begin
   fStatusText := 'TMyThread Starting ...';
   Synchronize(@Showstatus);
+  Synchronize(@initRend);
   fStatusText := 'TMyThread Running ...';
   RenderForm.yAxis:=yRender;
-  while  yRender<240 do begin
-    for x:=0 to 319 do begin
-      LineBuffer[x].r:=x mod 255;LineBuffer[x].g:=RenderForm.yAxis;LineBuffer[x].b:=128;
+  while  yRender<h do begin
+    for x:=0 to wide-1 do begin
+      LineBuffer[x].r:=x mod 255;
+      LineBuffer[x].g:=RenderForm.yAxis mod 255;
+      LineBuffer[x].b:=128;
       newStatus:='TMyThread Time: '+FormatDateTime('YYYY-MM-DD HH:NN:SS',Now);
     end;
     if NewStatus <> fStatusText then begin
@@ -164,6 +200,7 @@ begin
     Synchronize(@DoRend);
     sleep(50); // alternatively the thread may wait for an event. E.g., external I/O
   end;
+  fStatusText:='TMyThread is End';
   Synchronize(@Showstatus);
   Synchronize(@RendDone);
 end;
