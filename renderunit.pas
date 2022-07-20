@@ -38,7 +38,8 @@ unit RenderUnit;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
+  uVect,uModel,uScene,uFlux;
 
 const
   MaxThreadNum=4;
@@ -60,6 +61,7 @@ type
     LineBuffer:TLineBuffer;
     wide,h,samps:INTEGER;
     yRender:integer;
+    FLx:TFluxClass;
     constructor Create(CreateSuspended: boolean);
   end;
 
