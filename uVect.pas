@@ -21,10 +21,6 @@ type
         x,y,z:real;
     end;
 
-    uvwVecRecord=record
-      u,v,w:VecRecord;
-    end;
-
     RayRecord=record
        o, d:VecRecord;
      end;
@@ -48,8 +44,6 @@ function VecDot(const V1,V2 :VecRecord):real;//内積
 function VecCross(const V1,V2 :VecRecord):VecRecord;//外積
 function VecAdd3(const V1,V2,V3:VecRecord):VecRecord;inline;
 procedure VecWriteln(V:VecRecord);
-function uvwVecGet(const l:VecRecord):uvwVecRecord;inline;
-function VecSphereRef(const w:VecRecord):VecRecord;inline;(*vを法線に半球状に分布する光線を求める*)
 
 operator * (const v1:VecRecord;const r:real)v:VecRecord;inline;
 operator / (const v1:VecRecord;const r:real)v:VecRecord;inline;
@@ -127,33 +121,6 @@ end;
 procedure VecWriteln(V:VecRecord);
 begin
   writeln(v.x:8:2,' : ',v.y:8:2,' : ',v.z:8:2);
-end;
-
-function uvwVecGet(const l:VecRecord):uvwVecRecord;inline;
-begin
-  result.w:=l;
-  if abs(result.w.x)>0.1 then
-    result.u:=VecNorm(CreateVec(0,1,0)/result.w) 
-  else
-    result.u:=VecNorm(CreateVec(1,0,0)/result.w) ;
-  result.v:=result.w/result.u;
-end;
-function VecSphereRef(const w:VecRecord):VecRecord;inline;
-var
-  r1,r2,r2s:real;
-  uvw:uvwVecRecord;
-  u,v:VecRecord;
-begin
-  uvw:=uvwVecGet(w);
-  r1:=2*PI*random;r2:=random;r2s:=sqrt(r2);
-  {  
-     if abs(w.x)>0.1 then
-     u:=VecNorm(CreateVec(0,1,0)/w) 
-     else
-     u:=VecNorm(CreateVec(1,0,0)/w) ;
-     v:=w/u;
-  }
-  result := VecNorm(uvw.u*cos(r1)*r2s + uvw.v*sin(r1)*r2s + uvw.w*sqrt(1-r2));
 end;
 
 

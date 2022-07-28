@@ -71,7 +71,7 @@ procedure QuatRecord.CreateRotate(Axis:VecRecord;Angle:real);
 var
   ss,cc:real;
 begin
-  sincos(DegToRad(Angle),ss,cc);
+  sincos(DegToRad(Angle)/2,ss,cc);
   x:=Axis.x*ss;y:=Axis.y*ss; z:=Axis.z*ss;w:=cc;
 end;
 function QuatRecord.Rotate(p:VecRecord):VecRecord;

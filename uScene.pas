@@ -295,15 +295,15 @@ begin
   tempL.add( SphereClass.Create(16.5,CreateVec(27,16.5,47),        ZeroVec,CreateVec(1,1,1)*0.999,   SPEC) );//Mirror
   tempL.add( SphereClass.Create(16.5,CreateVec(73,16.5,88),        ZeroVec,CreateVec(1,1,1)*0.999,   REFR) );//Glass
 //  tempL.add( SphereClass.Create(600,CreateVec(50,681.6-0.27,81.6), CreateVec(4,4,4),   ZeroVec,  DIFF) );//Ligth
-//  tempL.add( RectClass.Create(XZ,40,60,70,90,CreateVec(50,70,80), CreateVec(4,4,4),   ZeroVec,  DIFF) );//Ligth
-  tempL.add( RectAngleClass.Create(CreateVec(48,68,78),CreateVec(52,72,82), CreateVec(4,4,4)*100,   ZeroVec,  DIFF) );//Ligth
+  tempL.add( RectClass.Create(XZ,40,60,70,90,CreateVec(50,70,80), CreateVec(4,4,4),   ZeroVec,  DIFF) );//Ligth
+//  tempL.add( RectAngleClass.Create(CreateVec(48,68,78),CreateVec(52,72,82), CreateVec(4,4,4)*100,   ZeroVec,  DIFF) );//Ligth
 
   SRL[MaxIndex].mdl:=tempL;
   SRL[MaxIndex].Cam.Setup(CreateVec(50,52,295.6),CreateVec(0,-0.042612,-1),w,h,0.5135,140);
 
   //-------------Debug Scene sc11-------------
   Inc(MaxIndex);
-  SRL[MaxIndex].SceneName:='10-Debug Scene';
+  SRL[MaxIndex].SceneName:='1-Rotate Debug Scene';
   tempL:=TList.Create;
   tempL.add( SphereClass.Create(1e5, CreateVec( 1e5+1,40.8,81.6),  ZeroVec,CreateVec(0.75,0.25,0.25),DIFF) );//Left
   tempL.add( SphereClass.Create(1e5, CreateVec(-1e5+99,40.8,81.6), ZeroVec,CreateVec(0.25,0.25,0.75),DIFF) );//Right

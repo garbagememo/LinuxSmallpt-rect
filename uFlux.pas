@@ -9,6 +9,9 @@ uses SysUtils,Classes,uVect,uModel,uScene,Math;
 type 
 
   TFluxClass=class
+    mdl:TList;
+    cam:CameraRecord;
+    function Intersect(const r:RayRecord;var t:real; var id:integer):boolean;
     function Radiance(r : RayRecord;Depth:integer ):VecRecord;Virtual;
   end;                
   TNEEFluxClass=class(TFluxClass)
@@ -20,6 +23,23 @@ type
 
 IMPLEMENTATION
 
+function TFluxClass.Intersect(const r:RayRecord;var t:real; var id:integer):boolean;
+var
+  d:real;
+  i:integer;
+begin
+  t:=INF;
+  for i:=0 to mdl.count-1 do begin
+    d:=SphereClass(mdl[i]).intersect(r);
+    if d<t then begin
+      t:=d;
+      id:=i;
+    end;
+  end;
+  result:=(t<inf);
+end;
+
+
 function TFluxClass.radiance( r:RayRecord;depth:integer):VecRecord;
 var
   id:integer;
@@ -30,6 +50,7 @@ var
   RefRay:RayRecord;
   nc,nt,nnt,ddn,cos2t,q,a,b,c,R0,Re,RP,Tr,TP:real;
   tDir:VecRecord;
+  uvwRef:uvwVecRecord;
 begin
   id:=0;depth:=depth+1;
   if intersect(r,t,id)=false then begin
@@ -54,7 +75,7 @@ begin
   end;
   case obj.refl of
     DIFF:begin
-      d := VecSphereRef(nl);
+      d := VecSphereRef(nl,uvwRef);
       result:=obj.e+VecMul(f,radiance(CreateRay(x,d),depth) );
     end;(*DIFF*)
     SPEC:begin
@@ -102,6 +123,7 @@ var
   cos_a_max,eps1,eps2,eps2s,cos_a,sin_a,phi,omega:real;
   cl,cf:VecRecord;
   E:integer;
+  uvwRef:uvwVecRecord;
 begin
   //writeln(' DebugY=',DebugY,' DebugX=',DebugX);
   depth:=0;
@@ -132,7 +154,7 @@ begin
     case obj.refl of
       DIFF:
         begin
-          d:=VecSphereRef(nl);
+          d:=VecSphereRef(nl,uvwRef);
           // Loop over any lights
           EL:=ZeroVec;
           tid:=id;
@@ -142,10 +164,12 @@ begin
               continue;
             end;
             if s.isLight=false  then continue; // skip non-lights
-            l:=s.GetLightPath(x);	  
+            s.uvwRef:=uvwRef;
+            l:=s.GetLightPath(x);
             if intersect(CreateRay(x,l),t,id) then begin
               if id=i then begin
                 tr:=l*nl;if tr<0 then tr:=0;
+ //               tr:=l*nl;
  //               tw:=s.e*(l*nl)*s.omega_1_pi;
                 EL:=EL+VecMul(f,(s.e*(tr)*s.omega_1_pi(l)));
               end;
@@ -212,6 +236,7 @@ var
   tDir:VecRecord;
   tu,tv:VecRecord;
   cl,cf:VecRecord;
+  uvwRef:uvwVecRecord;
 begin
 //writeln(' DebugY=',DebugY,' DebugX=',DebugX);
   depth:=0;
@@ -246,7 +271,7 @@ begin
     cf:=VecMul(cf,f);
     case obj.refl of
       DIFF:begin
-        d:=VecSphereRef(nl);
+        d:=VecSphereRef(nl,uvwRef);
         r:=CreateRay(x,d)
       end;(*DIFF*)
       SPEC:begin

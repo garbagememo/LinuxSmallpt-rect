@@ -60,21 +60,12 @@ type
   public
     LineBuffer:TLineBuffer;
     wide,h,samps:INTEGER;
-    ModelID:integer;
     yRender:integer;
-    tCam:CameraRecord;
+    Cam:CameraRecord;
     FLx:TFluxClass;
     constructor Create(CreateSuspended: boolean);
   end;
 
-  {ThreadList}
-  ThreadListRecord=Record
-    Ary:array[0..MaxThreadNum-1] of TMyThread;
-    MaxThread:integer;
-    procedure ClearList;
-    procedure Add(Th:TMyThread);
-    function GetThread(i:integer):TMyThread;
-  end;
   { TRenderForm }
 
   TRenderForm = class(TForm)
@@ -83,7 +74,7 @@ type
     Thread: TLabel;
     SaveBotton: TButton;
     RenderButton: TButton;
-    ComboBox1: TComboBox;
+    ModelComb: TComboBox;
     Label4: TLabel;
     Label5: TLabel;
     SamplesEdit: TEdit;
@@ -96,10 +87,12 @@ type
     procedure FormCreate(Sender: TObject);
     procedure RenderButtonClick(Sender: TObject);
     procedure RenderSetup;
+    function SuccYAxis:integer;
   private
     MinimamHeight:integer;
-    ThreadList : ThreadListRecord;
+    ThreadList : TList;
   public
+    ModelID,AlgoID:integer;
     yAxis:integer;
   end;
 
@@ -110,36 +103,41 @@ implementation
 
 {$R *.lfm}
 
-procedure ThreadListRecord.ClearList;
-begin
-  MaxThread:=-1;
-end;
-procedure ThreadListRecord.Add(Th:TMyThread);
-begin
-  if MaxThread<MaxThreadNum-1 then inc(MaxThread) else exit;
-  ary[MaxThread]:=Th;
-end;
-function ThreadListRecord.GetThread(i:integer):TMyThread;
-begin
-  if i<=MaxThread then result:=Ary[i] else result:=nil;
-end;
-
 
 
 { TRenderForm }
+function TRenderForm.SuccYAxis:integer;
+begin
+  inc(yAxis);
+  result:=yAxis;
+end;
 
 procedure TRenderForm.FormCreate(Sender: TObject);
+var
+  i:integer;
 begin
   // Here the code initialises anything required before the threads starts executing
   MinimamHeight:=Height;
-end;
+  SRList.InitSceneRecord(320,200);
+  for i:=0 to SRList.MaxIndex do
+    ModelComb.Items.Add(SRList.SRL[i].SceneName);
+  ModelComb.ItemIndex:=1;
+  ModelID:=1;
+  AlgoCombo.Items.Add('Original');
+  AlgoCombo.Items.Add('Next Event');
+  AlgoCombo.Items.Add('Non Loop');
+  AlgoCombo.Items.Add('LightPath');
+  AlgoCombo.ItemIndex:=1;
+  AlgoID:=1;
+  ThreadList:=TList.Create;
+ end;
 
 procedure TRenderForm.RenderButtonClick(Sender: TObject);
 var
   i:integer;
 begin
   RenderSetup;
-  for i:=0 to ThreadList.MaxThread do ThreadList.GetThread(i).Start;
+  for i:=0 to ThreadList.count-1 do TMyThread(ThreadList[i]).Start;
 end;
 
 procedure TRenderForm.RenderSetup;
@@ -148,12 +146,15 @@ var
   MyThread:TMyThread;
   ThreadNum:integer;
 begin
-  ThreadList.ClearList;//この時点ではスレッドが常に無い状態なのでClearで問題ない　onTerminate=TRUEなので
+  ThreadList.Clear;//この時点ではスレッドが常に無い状態なのでClearで問題ない　onTerminate=TRUEなので
   yAxis:=-1;
   imgRender.Width := strtoint(WidthEdit.Text);
   imgRender.Height := strtoint(HeightEdit.Text);
   ThreadNum:=StrToInt(ThreadEdit.text);
   samps:=StrToInt(SamplesEdit.text);
+  AlgoID:=AlgoCombo.ItemIndex;
+  ModelID:=ModelComb.ItemIndex;
+
   //add
   imgRender.Picture.Bitmap.Width:=imgRender.Width;
   imgRender.Picture.Bitmap.Height:=imgRender.Height;
@@ -173,8 +174,12 @@ begin
     MyThread.h:=imgRender.Height;
     Inc(yAxis);
     MyThread.yRender:=yAxis;
-    MyThread.FLx:=TFluxClass.Create;
-    MyThread.ModelID:=1;
+    case AlgoID of
+      0:MyThread.Flx:=TFluxClass.Create;
+      1:MyThread.FLx:=TNEEFluxClass.Create;
+      2:MyThread.FLx:=TLoopFluxClass.Create;
+    end;
+    MyThread.Flx.mdl:=SRList.GetScene(ModelID).mdl;
     MyThread.samps:=samps;
     ThreadList.add(MyThread);
   end;
@@ -184,14 +189,8 @@ end;
 { TMyThread }
 
 procedure TMyThread.InitRend;
-var
-  i:integer;
-  SceneRec:SceneRecord;
 begin
-  SRList.InitSceneRecord(wide,h);
-  SceneRec:=SRList.GetScene(ModelID);
-  mdl:=SceneRec.mdl;
-  cam:=SceneRec.cam;
+  Cam.Setup(CreateVec(50,52,295.6),CreateVec(0,-0.042612,-1),wide,h,0.5135,140);
 end;
 
 procedure TMyThread.DoRend;
@@ -200,17 +199,17 @@ var
 begin
    for x:=0 to wide-1 do begin
      RenderForm.ImgRender.Canvas.Pixels[x,yRender]:=
- 	     ColToByte(LineBuffer[x].x)+         //red
-         ColToByte(LineBuffer[x].y)*256+     //green
-         ColToByte(LineBuffer[x].z)*256*256; //blune
+       ColToByte(LineBuffer[x].x)+         //red
+       ColToByte(LineBuffer[x].y)*256+     //green
+       ColToByte(LineBuffer[x].z)*256*256; //blune
    end;
-   Inc(RenderForm.yAxis);
-   yRender:=RenderForm.yAxis;
+   yRender:=RenderForm.SuccYAxis;{フォームのメソッドじゃないとスレッドが動かないのが恐ろしい}
+   RenderForm.Caption:='y='+IntToStr(yRender);
 end;
 
 procedure TMyThread.RendDone;
 begin
-
+  RenderForm.Caption:='End Thread';
 end;
 
 procedure TMyThread.ShowStatus;
