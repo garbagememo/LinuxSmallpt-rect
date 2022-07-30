@@ -70,8 +70,8 @@ type
 
   TRenderForm = class(TForm)
     AlgoCombo: TComboBox;
-    ThreadEdit: TEdit;
     Thread: TLabel;
+    ThreadEdit: TEdit;
     SaveBotton: TButton;
     RenderButton: TButton;
     ModelComb: TComboBox;
@@ -142,9 +142,10 @@ end;
 
 procedure TRenderForm.RenderSetup;
 var
-  i,samps:integer;
+  cc,i,samps:integer;
   MyThread:TMyThread;
   ThreadNum:integer;
+  tMDL:TList;
 begin
   ThreadList.Clear;//この時点ではスレッドが常に無い状態なのでClearで問題ない　onTerminate=TRUEなので
   yAxis:=-1;
@@ -179,7 +180,11 @@ begin
       1:MyThread.FLx:=TNEEFluxClass.Create;
       2:MyThread.FLx:=TLoopFluxClass.Create;
     end;
-    MyThread.Flx.mdl:=SRList.GetScene(ModelID).mdl;
+    tMDL:=TList.Create;tMDL:=SRList.GetScene(ModelID).mdl;
+    MyThread.Flx.mdl:=TList.Create;
+    for cc:=0 to tMDL.Count-1 do begin
+      MyThread.Flx.mdl.add(ModelClass(tMDL[cc]).DeepCopy);
+    end;
     MyThread.samps:=samps;
     ThreadList.add(MyThread);
   end;

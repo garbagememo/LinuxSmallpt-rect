@@ -1,13 +1,13 @@
 object RenderForm: TRenderForm
-  Left = 48
+  Left = 50
   Height = 356
   Top = 129
-  Width = 612
+  Width = 610
   HorzScrollBar.Page = 407
   VertScrollBar.Page = 72
   Caption = 'RenderForm'
   ClientHeight = 356
-  ClientWidth = 612
+  ClientWidth = 610
   OnCreate = FormCreate
   LCLVersion = '2.2.0.4'
   object imgRender: TImage
@@ -25,23 +25,23 @@ object RenderForm: TRenderForm
     Text = '320'
   end
   object Label1: TLabel
-    Left = 116
-    Height = 16
+    Left = 118
+    Height = 19
     Top = 8
-    Width = 38
+    Width = 41
     Caption = 'Width'
     Font.Height = -15
-    Font.Name = 'Sans'
+    Font.Name = 'Cantarell'
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 108
-    Height = 16
+    Left = 113
+    Height = 19
     Top = 48
-    Width = 45
+    Width = 46
     Caption = 'Height'
     Font.Height = -15
-    Font.Name = 'Sans'
+    Font.Name = 'Cantarell'
     ParentFont = False
   end
   object HeightEdit: TEdit
@@ -53,13 +53,13 @@ object RenderForm: TRenderForm
     Text = '240'
   end
   object Label3: TLabel
-    Left = 105
-    Height = 16
+    Left = 102
+    Height = 19
     Top = 88
-    Width = 53
+    Width = 57
     Caption = 'Samples'
     Font.Height = -15
-    Font.Name = 'Sans'
+    Font.Name = 'Cantarell'
     ParentFont = False
   end
   object SamplesEdit: TEdit
@@ -71,41 +71,41 @@ object RenderForm: TRenderForm
     Text = '16'
   end
   object Label4: TLabel
-    Left = 24
+    Left = 16
     Height = 19
     Top = 248
     Width = 68
     Caption = 'Algorithm'
   end
   object AlgoCombo: TComboBox
-    Left = 108
+    Left = 88
     Height = 27
     Top = 248
-    Width = 160
+    Width = 180
     ItemHeight = 19
     TabOrder = 3
     Text = 'Original'
   end
   object Label5: TLabel
-    Left = 60
+    Left = 40
     Height = 19
     Top = 288
     Width = 43
     Caption = 'Model'
   end
   object ModelComb: TComboBox
-    Left = 105
+    Left = 90
     Height = 27
     Top = 288
-    Width = 163
+    Width = 178
     ItemHeight = 19
     TabOrder = 4
     Text = 'CornelBox'
   end
   object RenderButton: TButton
     Left = 168
-    Height = 33
-    Top = 168
+    Height = 34
+    Top = 160
     Width = 100
     Caption = 'Render'
     OnClick = RenderButtonClick
@@ -114,20 +114,10 @@ object RenderForm: TRenderForm
   object SaveBotton: TButton
     Left = 168
     Height = 33
-    Top = 208
+    Top = 200
     Width = 100
     Caption = 'Save'
     TabOrder = 6
-  end
-  object Thread: TLabel
-    Left = 108
-    Height = 16
-    Top = 128
-    Width = 45
-    Caption = 'Thread'
-    Font.Height = -15
-    Font.Name = 'Sans'
-    ParentFont = False
   end
   object ThreadEdit: TEdit
     Left = 168
@@ -136,5 +126,15 @@ object RenderForm: TRenderForm
     Width = 100
     TabOrder = 7
     Text = '4'
+  end
+  object Thread: TLabel
+    Left = 112
+    Height = 19
+    Top = 128
+    Width = 47
+    Caption = 'Thread'
+    Font.Height = -15
+    Font.Name = 'Cantarell'
+    ParentFont = False
   end
 end
