@@ -18,8 +18,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="RenderUnit"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="173"/>
-        <CursorPos X="13" Y="184"/>
+        <TopLine Value="197"/>
+        <CursorPos Y="200"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -32,164 +32,43 @@
       </Unit2>
       <Unit3>
         <Filename Value="uQuat.pas"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="98" Y="11"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="uFlux.pas"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="29" Y="7"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit4>
       <Unit5>
         <Filename Value="uVect.pas"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="46"/>
         <CursorPos Y="59"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit5>
       <Unit6>
         <Filename Value="uModel.pas"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="360"/>
         <CursorPos X="78" Y="360"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="uScene.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="324"/>
         <CursorPos X="18" Y="335"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit7>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="1">
       <Position1>
         <Filename Value="renderunit.pas"/>
-        <Caret Line="157" Column="63" TopLine="139"/>
+        <Caret Line="95" Column="64" TopLine="72"/>
       </Position1>
-      <Position2>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="144" Column="98" TopLine="139"/>
-      </Position2>
-      <Position3>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="145" Column="98" TopLine="140"/>
-      </Position3>
-      <Position4>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="143" Column="59" TopLine="141"/>
-      </Position4>
-      <Position5>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="138" Column="49" TopLine="126"/>
-      </Position5>
-      <Position6>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="79" Column="59" TopLine="66"/>
-      </Position6>
-      <Position7>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="138" Column="62" TopLine="126"/>
-      </Position7>
-      <Position8>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="49" Column="14" TopLine="49"/>
-      </Position8>
-      <Position9>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="147" Column="23" TopLine="135"/>
-      </Position9>
-      <Position10>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="130" Column="31" TopLine="129"/>
-      </Position10>
-      <Position11>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="63" Column="19" TopLine="59"/>
-      </Position11>
-      <Position12>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="248" Column="30" TopLine="229"/>
-      </Position12>
-      <Position13>
-        <Filename Value="uQuat.pas"/>
-        <Caret Line="8" Column="14"/>
-      </Position13>
-      <Position14>
-        <Filename Value="uFlux.pas"/>
-        <Caret Line="7" Column="29"/>
-      </Position14>
-      <Position15>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="193" Column="3" TopLine="173"/>
-      </Position15>
-      <Position16>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="227" Column="8" TopLine="218"/>
-      </Position16>
-      <Position17>
-        <Filename Value="uModel.pas"/>
-        <Caret Line="381" Column="78" TopLine="361"/>
-      </Position17>
-      <Position18>
-        <Filename Value="uQuat.pas"/>
-        <Caret Line="11" Column="98"/>
-      </Position18>
-      <Position19>
-        <Filename Value="uModel.pas"/>
-        <Caret Line="364" TopLine="358"/>
-      </Position19>
-      <Position20>
-        <Filename Value="uModel.pas"/>
-        <Caret Line="376" Column="3" TopLine="367"/>
-      </Position20>
-      <Position21>
-        <Filename Value="uModel.pas"/>
-        <Caret Line="361" Column="70" TopLine="347"/>
-      </Position21>
-      <Position22>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="227" Column="8" TopLine="129"/>
-      </Position22>
-      <Position23>
-        <Filename Value="uModel.pas"/>
-        <Caret Line="386" TopLine="372"/>
-      </Position23>
-      <Position24>
-        <Filename Value="uModel.pas"/>
-        <Caret Line="379" Column="37" TopLine="367"/>
-      </Position24>
-      <Position25>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="227" Column="8" TopLine="129"/>
-      </Position25>
-      <Position26>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="226" Column="8" TopLine="203"/>
-      </Position26>
-      <Position27>
-        <Filename Value="uScene.pas"/>
-        <Caret Line="306" Column="31" TopLine="300"/>
-      </Position27>
-      <Position28>
-        <Filename Value="uModel.pas"/>
-        <Caret Line="405" TopLine="393"/>
-      </Position28>
-      <Position29>
-        <Filename Value="uScene.pas"/>
-        <Caret Line="335" Column="18" TopLine="324"/>
-      </Position29>
-      <Position30>
-        <Filename Value="renderunit.pas"/>
-        <Caret Line="188" Column="4" TopLine="167"/>
-      </Position30>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

@@ -19,8 +19,8 @@
  ***************************************************************************
 
   Abstract:
-    Demo to show, how to start a thread and how synchronize with the main
-    thread.
+    Demo to show, how to start a ThreadLabel and how synchronize with the main
+    ThreadLabel.
     Important: The cthread unint must be added to the uses section of the .lpr
                file. See multithreadingexample1.lpr.
 
@@ -38,6 +38,7 @@ unit RenderUnit;
 interface
 
 uses
+  LCLIntf, LCLType,//これが無いとダイアログが動かない
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   uVect,uModel,uScene,uFlux;
 
@@ -70,7 +71,8 @@ type
 
   TRenderForm = class(TForm)
     AlgoCombo: TComboBox;
-    Thread: TLabel;
+    SaveDlg: TSaveDialog;
+    ThreadLabel: TLabel;
     ThreadEdit: TEdit;
     SaveBotton: TButton;
     RenderButton: TButton;
@@ -87,6 +89,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure RenderButtonClick(Sender: TObject);
     procedure RenderSetup;
+    procedure SaveBottonClick(Sender: TObject);
     function SuccYAxis:integer;
   private
     MinimamHeight:integer;
@@ -191,6 +194,11 @@ begin
   
 end;
 
+procedure TRenderForm.SaveBottonClick(Sender: TObject);
+begin
+    IF SaveDlg.Execute THEN ImgRender.Picture.SaveToFile(SaveDlg.Filename);
+end;
+
 { TMyThread }
 
 procedure TMyThread.InitRend;
@@ -219,8 +227,8 @@ end;
 
 procedure TMyThread.ShowStatus;
 // this method is only called by Synchronize(@ShowStatus) and therefore
-// executed by the main thread
-// The main thread can access GUI elements, for example RenderForm.Caption.
+// executed by the main ThreadLabel
+// The main ThreadLabel can access GUI elements, for example RenderForm.Caption.
 begin
   RenderForm.Caption := fStatusText;
 end;

@@ -117,6 +117,7 @@ object RenderForm: TRenderForm
     Top = 200
     Width = 100
     Caption = 'Save'
+    OnClick = SaveBottonClick
     TabOrder = 6
   end
   object ThreadEdit: TEdit
@@ -127,14 +128,19 @@ object RenderForm: TRenderForm
     TabOrder = 7
     Text = '4'
   end
-  object Thread: TLabel
-    Left = 112
+  object ThreadLabel: TLabel
+    Left = 75
     Height = 19
     Top = 128
-    Width = 47
-    Caption = 'Thread'
+    Width = 84
+    Caption = 'ThreadLabel'
     Font.Height = -15
     Font.Name = 'Cantarell'
     ParentFont = False
+  end
+  object SaveDlg: TSaveDialog
+    FileName = 'temp.png'
+    Left = 63
+    Top = 197
   end
 end
