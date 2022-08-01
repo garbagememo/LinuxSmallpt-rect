@@ -12,49 +12,49 @@ object MainForm: TMainForm
   LCLVersion = '2.2.0.4'
   object Label1: TLabel
     Left = 65
-    Height = 18
+    Height = 19
     Top = 8
-    Width = 45
+    Width = 41
     Caption = 'Width'
   end
   object Label2: TLabel
     Left = 61
-    Height = 18
+    Height = 19
     Top = 40
-    Width = 54
+    Width = 46
     Caption = 'Height'
   end
   object Label3: TLabel
     Left = 22
-    Height = 18
+    Height = 19
     Top = 72
-    Width = 99
+    Width = 92
     Caption = 'SampleCount'
   end
   object Label4: TLabel
     Left = 48
-    Height = 18
+    Height = 19
     Top = 104
-    Width = 63
+    Width = 54
     Caption = 'Threads'
   end
   object Label5: TLabel
     Left = 43
-    Height = 16
+    Height = 19
     Top = 136
     Width = 60
     Caption = '経過時間'
   end
   object lblTime: TLabel
     Left = 112
-    Height = 18
+    Height = 19
     Top = 136
-    Width = 72
+    Width = 63
     Caption = '00:00:00'
   end
   object StrWidth: TEdit
     Left = 112
-    Height = 35
+    Height = 27
     Top = 8
     Width = 80
     TabOrder = 0
@@ -62,7 +62,7 @@ object MainForm: TMainForm
   end
   object StrHeight: TEdit
     Left = 112
-    Height = 35
+    Height = 27
     Top = 40
     Width = 80
     TabOrder = 1
@@ -70,7 +70,7 @@ object MainForm: TMainForm
   end
   object StrSampleCount: TEdit
     Left = 112
-    Height = 35
+    Height = 27
     Top = 72
     Width = 80
     TabOrder = 2
@@ -78,7 +78,7 @@ object MainForm: TMainForm
   end
   object StrThreadCount: TEdit
     Left = 112
-    Height = 35
+    Height = 27
     Top = 104
     Width = 80
     TabOrder = 3
@@ -111,36 +111,36 @@ object MainForm: TMainForm
   end
   object SceneCombo: TComboBox
     Left = 16
-    Height = 35
+    Height = 27
     Top = 272
     Width = 176
-    ItemHeight = 0
+    ItemHeight = 19
     OnChange = SceneComboChange
     TabOrder = 6
     Text = 'SceneCombo'
   end
   object AlgolCombo: TComboBox
     Left = 16
-    Height = 35
+    Height = 27
     Top = 320
     Width = 176
-    ItemHeight = 0
+    ItemHeight = 19
     OnChange = AlgolComboChange
     TabOrder = 7
     Text = 'render-algolthm'
   end
   object Model: TLabel
     Left = 22
-    Height = 18
+    Height = 19
     Top = 256
-    Width = 45
+    Width = 43
     Caption = 'Model'
   end
   object Aloglthm: TLabel
     Left = 16
-    Height = 18
+    Height = 19
     Top = 304
-    Width = 81
+    Width = 68
     Caption = 'Algorithm'
   end
   object SaveDlg: TSaveDialog

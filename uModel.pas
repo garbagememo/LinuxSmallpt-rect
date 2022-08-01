@@ -80,7 +80,7 @@ type
     function omega_1_pi(const l:VecRecord):real;override;
   end;
 
-  RotateRecAngleClass=Class(RectAngleClass)
+  RotateRecAngleClass=class(RectAngleClass)
     Quat,RevQuat:QuatRecord;
     OrgDeg:real;
     OrgAxis:VecRecord;
@@ -97,6 +97,7 @@ type
     ratio     : real;
     samples   : integer;
     procedure Setup(o_,d_: VecRecord;w_,h_:integer;ratio_,dist_:real);
+    procedure ReWidth(w_:integer);
     procedure SetSamples(sam :integer);
     function Ray(x,y,sx,sy : integer):RayRecord;
   end;
@@ -148,6 +149,11 @@ begin
   cx:=CreateVec(ratio*w_/h_,0,0);
   cy:=VecNorm(cx/d_)*ratio;
   samples:=DefaultSamples;
+end;
+procedure CameraRecord.ReWidth(w_:integer);
+begin
+  h:=h*w_ div w;
+  w:=w_;
 end;
 
 procedure CameraRecord.SetSamples(sam :integer );

@@ -57,7 +57,7 @@
       <Filename Value="spt"/>
     </Target>
     <SearchPaths>
-      <UnitOutputDirectory Value="/home/average/work/src/LSPT03/out"/>
+      <UnitOutputDirectory Value="out"/>
     </SearchPaths>
     <CodeGeneration>
       <SmartLinkUnit Value="True"/>

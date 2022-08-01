@@ -1,180 +1,180 @@
-﻿UNIT uLightPath;
+unit uLightPath;
 
 {$MODE objfpc}{$H+}
 {$INLINE ON}
 {$modeswitch advancedrecords}
-INTERFACE
-USES SysUtils,Classes,uVect,uModel,uXML,Math;
+interface
+uses SysUtils,Classes,uVect,uModel,uXML,Math;
 
-CONST 
+const 
  LightPathMax=5;
-TYPE 
-  LightPathRecord=RECORD
-    LPMax:INTEGER;
-    Ary:ARRAY[0..LightPathMax] OF VertexRecord;
-    PROCEDURE clear;
-    PROCEDURE Add(V_:VertexRecord);
-  END;
+type 
+  LightPathRecord=record
+    LPMax:integer;
+    Ary:array[0..LightPathMax] of VertexRecord;
+    procedure clear;
+    procedure Add(V_:VertexRecord);
+  end;
 
-  LightPathList=RECORD
-    LMax:INTEGER;
-    ary:ARRAY[0..255] OF LightPathRecord;
+  LightPathList=record
+    LMax:integer;
+    ary:array[0..255] of LightPathRecord;
     SR: SceneRecord;
-    PROCEDURE Clear;
-    PROCEDURE Add(LP : LightPathRecord);
-    PROCEDURE SetScene(sr_ :SceneRecord );
-    PROCEDURE GetLigthPath;
-  END;
+    procedure Clear;
+    procedure Add(LP : LightPathRecord);
+    procedure SetScene(sr_ :SceneRecord );
+    procedure GetLigthPath;
+  end;
 
 
-IMPLEMENTATION
+implementation
 
-PROCEDURE LightPathRecord.clear;
-BEGIN
+procedure LightPathRecord.clear;
+begin
   LPMax:=-1;
-END;
+end;
 
-PROCEDURE LightPathRecord.Add(V_:VertexRecord);
-BEGIN
+procedure LightPathRecord.Add(V_:VertexRecord);
+begin
   inc(LPMax);
-  IF LPMax>4 THEN BEGIN
-    WRITELN('Over List!');
-    HALT(0);
-  END;
+  if LPMax>4 then begin
+    writeln('Over List!');
+    halt(0);
+  end;
   ary[LPMax]:=v_;
-END;
+end;
 
-PROCEDURE LightPathList.SetScene(sr_:SceneRecord);
-BEGIN
+procedure LightPathList.SetScene(sr_:SceneRecord);
+begin
   SR:=sr_;
-END;
+end;
 
-PROCEDURE LightPathList.Clear;
-BEGIN
+procedure LightPathList.Clear;
+begin
   LMax:=-1;
-END;
+end;
 
-PROCEDURE LightPathList.Add(LP : LightPathRecord);
-BEGIN
+procedure LightPathList.Add(LP : LightPathRecord);
+begin
   Inc(LMax);
   Ary[LMax]:=LP;
-END;
+end;
 
-PROCEDURE LightPathList.GetLigthPath;
-VAR
+procedure LightPathList.GetLigthPath;
+var
   LP:LightPathRecord;
   tVert,cV:VertexRecord;
-  i,depth,k:INTEGER;
+  i,depth,k:integer;
   r:RayRecord;
-  id:INTEGER;
+  id:integer;
   obj:SphereClass;
   x,n,f,nl,u,v,w,d:VecRecord;
   p,r1,r2,r2s,t,ss,cc,nrd,OMEGA,cos_a_max:real;
-  into:BOOLEAN;
+  into:boolean;
   RefRay:RayRecord;
   nc,nt,nnt,ddn,cos2t,q,a,b,c,R0,Re,RP,Tr,TP,ts:real;
   tDir:VecRecord;
   tu,tv,sw:VecRecord;
   cl,cf:VecRecord;
-BEGIN
-  FOR i:=0 TO SR.spl.Count-1 DO BEGIN
-    IF SphereClass(SR.spl[i]).isLight THEN BEGIN
+begin
+  for i:=0 to SR.spl.Count-1 do begin
+    if SphereClass(SR.spl[i]).isLight then begin
       tVert:=SR.GenLight(i);
       LP.Clear;
       LP.Add(tVert);
       r.d:=tVert.n;//球であるからこその省略
       r.o:=tVert.p;
       depth:=1;
-      REPEAT
+      repeat
         cf:=tVert.cf;
-        IF SR.intersect(r,t,id) =FALSE THEN BREAK;
+        if SR.intersect(r,t,id) =false then BREAK;
 //get radiance
         obj:=SphereClass(SR.spl[id]);
-        IF obj.isLight THEN Break;
+        if obj.isLight then Break;
         x:=r.o+r.d*t; n:=VecNorm(x-obj.p); f:=obj.c;
         nrd:=n*r.d;
-        IF nrd<0 THEN nl:=n ELSE nl:=n*-1;
+        if nrd<0 then nl:=n else nl:=n*-1;
         cV.p:=x;cV.n:=nl;cV.id:=id;
-        IF (f.x>f.y)AND(f.x>f.z) THEN 
+        if (f.x>f.y)and(f.x>f.z) then 
           p:=f.x
-        ELSE IF f.y>f.z THEN 
+        else if f.y>f.z then 
           p:=f.y
-        ELSE
+        else
           p:=f.z;
 
 
         cf:=VecMul(cf,f);
-        CASE obj.refl OF
-          DIFF:BEGIN
+        case obj.refl of
+          DIFF:begin
             r1:=M_2PI*random;r2:=random;r2s:=sqrt(r2);
             w:=nl;
-            IF abs(w.x)>0.01 THEN u:=VecNorm(CreateVec(0,1,0)/w) ELSE u:=VecNorm(CreateVec(1,0,0)/w);
+            if abs(w.x)>0.01 then u:=VecNorm(CreateVec(0,1,0)/w) else u:=VecNorm(CreateVec(1,0,0)/w);
             v:=w/u;
             sincos(r1,ss,cc);
             u:=u*(cc*r2s);v:=v*(ss*r2s);w:=w*(sqrt(1-r2));
             d:=VecNorm( VecAdd3(u,v,w) );
             r:=CreateRay(x,d)
-          END;(*DIFF*)
-          SPEC:BEGIN
+          end;(*DIFF*)
+          SPEC:begin
 //            tv:=n*2*nrd ;tv:=r.d-tv;
             r:=CreateRay(x,(r.d-(n*2*nrd) ) );
-          END;(*SPEC*)
-          REFR:BEGIN
+          end;(*SPEC*)
+          REFR:begin
 //            tv:=n*2*nrd ;tv:=r.d-tv;
             RefRay:=CreateRay(x,(r.d-(n*2*nrd) ) );
             into:= (n*nl>0);
-            nc:=1;nt:=1.5; IF into THEN nnt:=nc/nt ELSE nnt:=nt/nc; ddn:=r.d*nl;
+            nc:=1;nt:=1.5; if into then nnt:=nc/nt else nnt:=nt/nc; ddn:=r.d*nl;
             cos2t:=1-nnt*nnt*(1-ddn*ddn);
-            IF cos2t<0 THEN BEGIN   // Total internal reflection
+            if cos2t<0 then begin   // Total internal reflection
               r:=RefRay;
               continue;
-            END;
-            IF into THEN q:=1 ELSE q:=-1;
+            end;
+            if into then q:=1 else q:=-1;
             tdir := VecNorm(r.d*nnt - n*(q*(ddn*nnt+sqrt(cos2t))));
-            IF into THEN Q:=-ddn ELSE Q:=tdir*n;
+            if into then Q:=-ddn else Q:=tdir*n;
             a:=nt-nc; b:=nt+nc; R0:=a*a/(b*b); c := 1-Q;
             Re:=R0+(1-R0)*c*c*c*c*c;Tr:=1-Re;P:=0.25+0.5*Re;RP:=Re/P;TP:=Tr/(1-P);
-            IF random<p THEN BEGIN// 反射
+            if random<p then begin// 反射
               cf:=cf*RP;
               r:=RefRay;
-            END
-            ELSE BEGIN//屈折
+            end
+            else begin//屈折
               cf:=cf*TP;
               r:=CreateRay(x,tdir);
-            END
-          END;(*REFR*)
-        END;(*CASE*)
+            end
+          end;(*REFR*)
+        end;(*CASE*)
 
 //OMEGA 算出
-        IF obj.REFL=DIFF THEN BEGIN
+        if obj.REFL=DIFF then begin
           sw:=r.d;
           tr:=VecSQR(SphereClass(SR.spl[tVert.id]).p-x);
           tr:=SphereClass(SR.spl[tVert.id]).rad2/tr;
           ts:=sw*cV.n;
-          IF ts<0 THEN ts:=-ts;
-          IF tr>1 THEN BEGIN
+          if ts<0 then ts:=-ts;
+          if tr>1 then begin
               (*半球内部なら乱反射した寄与全てを取ればよい・・はず*)
             OMEGA:=1;
-          END
-          ELSE BEGIN //半球外部の場合;
+          end
+          else begin //半球外部の場合;
             cos_a_max := sqrt(1-tr );
             OMEGA := 2*PI*(1-cos_a_max)/PI;// 1/pi for brdf
             OMEGA:=OMEGA*ts;
-          END;
+          end;
     //OMEGA算出
           cf:=cf*OMEGA;
-        END;
+        end;
         cV.cf:=cf;
         LP.Add( cV);
         tVert:=cV;
         Inc(Depth)
-      UNTIL Depth>=LightPathMax;
+      until Depth>=LightPathMax;
       Add(LP);
-    END;(*is Light*)
-  END;(*obj毎*)
-END;
+    end;(*is Light*)
+  end;(*obj毎*)
+end;
 
-BEGIN
-END.
+begin
+end.
 
 

@@ -1,4 +1,4 @@
-﻿unit uScene;
+unit uScene;
 {$MODE objfpc}
 {$INLINE ON}
 {$modeswitch advancedrecords}
@@ -23,7 +23,6 @@ type
     MaxIndex:integer;
     SRL:array[0..MaxSceneList] of SceneRecord;
     procedure InitSceneRecord(w,h:integer);
-    function GetScene(id:integer):SceneRecord;
     function DeepCopyModel(id:integer):TList;
     procedure AddScene(Scene:SceneRecord);
   end;
@@ -39,11 +38,6 @@ begin
   end;
 end;
 
-function SceneRecordList.GetScene(id:integer):SceneRecord;
-begin
-  if MaxIndex<id then begin writeln('Model List index over!');halt;end;
-  result:=SRL[id];
-end;
 function SceneRecordList.DeepCopyModel(id:integer):TList;
 var
   i:integer;
@@ -55,6 +49,7 @@ begin
   end;
   result:=mdl;
 end;
+
 procedure SceneRecordList.InitSceneRecord(w,h:integer);
 var
   i:integer;
