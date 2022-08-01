@@ -56,7 +56,8 @@ TYPE
   PUBLIC
     LineBuffer:TLineBuffer;
     wide,h,samps:INTEGER;
-    MSR:SceneRecord;
+    mdl:TList;
+    cam:CameraRecord;
     yRender:INTEGER;
     FUNCTION Intersect(CONST r:RayRecord;VAR t:real; VAR id:INTEGER):BOOLEAN;
     FUNCTION Radiance(r:RayRecord;depth:INTEGER):VecRecord;virtual;
@@ -269,8 +270,8 @@ END;
 
 PROCEDURE TRenderThread.InitRend;
 BEGIN
-   MSR.mdl:=SRList.DeepCopyModel(MainForm.ModelIndex);
-   MSR.cam.Setup(CreateVec(50,52,295.6),CreateVec(0,-0.042612,-1),wide,h,0.5135,140);
+   mdl:=SRList.DeepCopyModel(MainForm.ModelIndex);
+   cam.Setup(CreateVec(50,52,295.6),CreateVec(0,-0.042612,-1),wide,h,0.5135,140);
 END;
 
 PROCEDURE TRenderThread.DoRend;
@@ -323,7 +324,7 @@ BEGIN
      FOR sy:=0 TO 1 DO BEGIN
        FOR sx:=0 TO 1 DO BEGIN
          FOR s:=0 TO samps-1 DO BEGIN
-           temp:=Radiance(MSR.Cam.Ray(x,y,sx,sy),0);
+           temp:=Radiance(Cam.Ray(x,y,sx,sy),0);
            temp:= temp/ samps;
            r:= r+temp;
          END;(*samps*)
@@ -357,8 +358,8 @@ VAR
   i:INTEGER;
 BEGIN
   t:=INF;
-  FOR i:=0 TO MSR.mdl.count-1 DO BEGIN
-    d:=ModelClass(MSR.mdl[i]).intersect(r);
+  FOR i:=0 TO mdl.count-1 DO BEGIN
+    d:=ModelClass(mdl[i]).intersect(r);
     IF d<t THEN BEGIN
       t:=d;
       id:=i;
@@ -383,7 +384,7 @@ BEGIN
   IF intersect(r,t,id)=FALSE THEN BEGIN
     result:=ZeroVec;EXIT;
   END;
-  obj:=ModelClass(MSR.mdl[id]);
+  obj:=ModelClass(mdl[id]);
   x:=r.o+r.d*t; n:=VecNorm(x-obj.p); f:=obj.c;
   IF VecDot(n,r.d)<0 THEN nl:=n ELSE nl:=n*-1;
   IF (f.x>f.y)AND(f.x>f.z) THEN
@@ -473,7 +474,7 @@ begin
       result:=cl;
       exit;
     end;
-    obj:=ModelClass(MSR.mdl[id]);
+    obj:=ModelClass(mdl[id]);
     x:=r.o+r.d*t; n:=obj.GetNorm(x); f:=obj.c;
     if n*r.d<0 then nl:=n else nl:=n*-1;
     if (f.x>f.y)and(f.x>f.z) then p:=f.x else if f.y>f.z then p:=f.y else p:=f.z;
@@ -497,8 +498,8 @@ begin
           // Loop over any lights
           EL:=ZeroVec;
           tid:=id;
-          for i:=0 to MSR.mdl.count-1 do begin
-            s:=ModelClass(MSR.mdl[i]);
+          for i:=0 to mdl.count-1 do begin
+            s:=ModelClass(mdl[i]);
             if (i=tid) then begin
               continue;
             end;
@@ -586,7 +587,7 @@ begin
       result:=cl;
       exit;
     end;
-    obj:=ModelClass(MSR.mdl[id]);
+    obj:=ModelClass(mdl[id]);
     x:=r.o+r.d*t; n:=obj.GetNorm(x); f:=obj.c;
     nrd:=n*r.d;
     if nrd<0 then nl:=n else nl:=n*-1;
