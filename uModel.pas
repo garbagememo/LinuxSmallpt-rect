@@ -293,9 +293,9 @@ begin
          if (pt.x<H2) and (pt.x>H1) and (pt.y<V2)and (pt.y>V1) then result:=t;
        end;(*xy*)
     xz:begin
+         result:=INF;
          if abs(r.d.y)<eps then exit;
          t:=(p.y-r.o.y)/r.d.y;
-         result:=INF;
          if t<eps then exit;//result is INF
          pt:=r.o+r.d*t;
          if (pt.x<H2) and (pt.x>H1) and (pt.z<V2)and (pt.z>V1) then result:=t;
