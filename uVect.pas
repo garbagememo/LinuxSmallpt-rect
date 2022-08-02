@@ -33,7 +33,10 @@ const
    BackGroundColor:VecRecord = (x:0;y:0;z:0);
    ZeroVec:VecRecord = (x:0;y:0;z:0);
    OneVec:VecRecord=(x:1;y:1;z:1);
-   
+   MidOneVec:VecRecord	     = (x:0;y:1;z:1);
+   TopOneVec:VecRecord	     = (x:1;y:0;z:0);
+
+
 function CreateVec(x_,y_,z_:real):VecRecord;
 function VecMul(const V1,V2:VecRecord):VecRecord;inline;
 function VecNeg(const V:VecRecord):VecRecord;inline;

@@ -1,4 +1,4 @@
-﻿unit uQuat;
+unit uQuat;
 {$MODE objfpc}{$H+}
 {$INLINE ON}
 {$modeswitch advancedrecords}
@@ -24,7 +24,7 @@ function FromRoteX(v:VecRecord;rad:real):QuatRecord;
 function FromRoteY(v:VecRecord;rad:real):QuatRecord;
 function FromRoteZ(v:VecRecord;rad:real):QuatRecord;
 
-IMPLEMENTATION
+implementation
 function CreateQuat(x_,y_,z_,w_:real):QuatRecord;
 begin
   result.x:=x_;result.y:=y_;result.z:=z_;result.w:=w_;
@@ -100,6 +100,6 @@ begin
                      w1*q.w - x1  * q.x - y1 * q.y - z1 * q.z);
 end;
 
-BEGIN
-END.
+begin
+end.
 

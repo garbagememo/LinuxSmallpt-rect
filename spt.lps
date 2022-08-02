@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="12"/>
+    <BuildModes>
+      <SessionMatrixOptions Count="2">
+        <Item1 ID="983902142717" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
+        <Item2 ID="375735515680" Modes="default" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
+      </SessionMatrixOptions>
+    </BuildModes>
+    <Units Count="15">
+      <Unit0>
+        <Filename Value="spt.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="21"/>
+        <UsageCount Value="41"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="uemit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uEmit"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="332"/>
+        <CursorPos Y="351"/>
+        <UsageCount Value="41"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="mainunit.lfm"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="ImageTest.lps"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="XML"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="uVect.pas"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="70"/>
+        <CursorPos X="35" Y="91"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="common.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="33"/>
+        <CursorPos X="11" Y="35"/>
+        <UsageCount Value="10"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="uModel.pas"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="143"/>
+        <CursorPos X="15" Y="155"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="/usr/lib/lazarus/2.0.0/lcl/interfaces/gtk2/interfaces.pas"/>
+        <UnitName Value="Interfaces"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="25"/>
+        <CursorPos X="6" Y="40"/>
+        <UsageCount Value="10"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="../smallpt-NEE/engine.pas"/>
+        <UnitName Value="Engine"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="89"/>
+        <CursorPos Y="90"/>
+        <UsageCount Value="10"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="../smallpt-NEE/main.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="136"/>
+        <CursorPos Y="136"/>
+        <UsageCount Value="11"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="../smallpt-NEE/uModel.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="43"/>
+        <UsageCount Value="10"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="uLightPath.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="134"/>
+        <CursorPos X="15" Y="151"/>
+        <UsageCount Value="10"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="/usr/lib/lazarus/2.0.10/lcl/interfaces/win32/win32int.pp"/>
+        <UnitName Value="Win32Int"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="19"/>
+        <CursorPos X="3" Y="31"/>
+        <UsageCount Value="10"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="uScene.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="13"/>
+        <CursorPos X="77" Y="52"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="uFlux.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="21"/>
+        <UsageCount Value="10"/>
+      </Unit14>
+    </Units>
+    <JumpHistory Count="9" HistoryIndex="8">
+      <Position1>
+        <Filename Value="uScene.pas"/>
+        <Caret Line="54" Column="48" TopLine="43"/>
+      </Position1>
+      <Position2>
+        <Filename Value="uScene.pas"/>
+        <Caret Line="52" Column="77" TopLine="45"/>
+      </Position2>
+      <Position3>
+        <Filename Value="uModel.pas"/>
+        <Caret Line="155" Column="15" TopLine="143"/>
+      </Position3>
+      <Position4>
+        <Filename Value="uemit.pas"/>
+        <Caret Line="66" Column="7" TopLine="55"/>
+      </Position4>
+      <Position5>
+        <Filename Value="uemit.pas"/>
+        <Caret Line="33" Column="44" TopLine="22"/>
+      </Position5>
+      <Position6>
+        <Filename Value="uemit.pas"/>
+        <Caret Line="62" Column="5" TopLine="45"/>
+      </Position6>
+      <Position7>
+        <Filename Value="uemit.pas"/>
+        <Caret Line="351" TopLine="351"/>
+      </Position7>
+      <Position8>
+        <Filename Value="uemit.pas"/>
+        <Caret Line="364" Column="10" TopLine="354"/>
+      </Position8>
+      <Position9>
+        <Filename Value="uemit.pas"/>
+        <Caret Line="62" TopLine="50"/>
+      </Position9>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode="default"/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
