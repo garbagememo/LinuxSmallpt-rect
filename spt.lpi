@@ -42,12 +42,12 @@
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
-        <Filename Value="uflux.pas"/>
+        <Filename Value="uemit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="uFlux"/>
+        <UnitName Value="uEmit"/>
       </Unit1>
     </Units>
   </ProjectOptions>
@@ -57,7 +57,7 @@
       <Filename Value="spt"/>
     </Target>
     <SearchPaths>
-      <UnitOutputDirectory Value="out"/>
+      <UnitOutputDirectory Value="/home/average/work/src/LSPT/out"/>
     </SearchPaths>
     <CodeGeneration>
       <SmartLinkUnit Value="True"/>
