@@ -23,9 +23,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uEmit"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="332"/>
-        <CursorPos Y="351"/>
+        <TopLine Value="269"/>
+        <CursorPos Y="270"/>
         <UsageCount Value="41"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -44,7 +43,7 @@
       </Unit3>
       <Unit4>
         <Filename Value="uVect.pas"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="70"/>
         <CursorPos X="35" Y="91"/>
         <UsageCount Value="16"/>
@@ -59,7 +58,7 @@
       </Unit5>
       <Unit6>
         <Filename Value="uModel.pas"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="143"/>
         <CursorPos X="15" Y="155"/>
         <UsageCount Value="16"/>
@@ -96,10 +95,12 @@
       </Unit10>
       <Unit11>
         <Filename Value="uLightPath.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="134"/>
-        <CursorPos X="15" Y="151"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="234"/>
+        <CursorPos X="21" Y="247"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit11>
       <Unit12>
         <Filename Value="/usr/lib/lazarus/2.0.10/lcl/interfaces/win32/win32int.pp"/>
@@ -111,7 +112,7 @@
       </Unit12>
       <Unit13>
         <Filename Value="uScene.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="13"/>
         <CursorPos X="77" Y="52"/>
         <UsageCount Value="10"/>
@@ -124,7 +125,7 @@
         <UsageCount Value="10"/>
       </Unit14>
     </Units>
-    <JumpHistory Count="9" HistoryIndex="8">
+    <JumpHistory Count="16" HistoryIndex="15">
       <Position1>
         <Filename Value="uScene.pas"/>
         <Caret Line="54" Column="48" TopLine="43"/>
@@ -161,6 +162,34 @@
         <Filename Value="uemit.pas"/>
         <Caret Line="62" TopLine="50"/>
       </Position9>
+      <Position10>
+        <Filename Value="uemit.pas"/>
+        <Caret Line="33" Column="55" TopLine="19"/>
+      </Position10>
+      <Position11>
+        <Filename Value="uemit.pas"/>
+        <Caret Line="270" TopLine="269"/>
+      </Position11>
+      <Position12>
+        <Filename Value="uLightPath.pas"/>
+        <Caret Line="81" Column="52" TopLine="71"/>
+      </Position12>
+      <Position13>
+        <Filename Value="uLightPath.pas"/>
+        <Caret Line="91" Column="25" TopLine="81"/>
+      </Position13>
+      <Position14>
+        <Filename Value="uLightPath.pas"/>
+        <Caret Line="141" Column="25" TopLine="131"/>
+      </Position14>
+      <Position15>
+        <Filename Value="uLightPath.pas"/>
+        <Caret Line="206" Column="23" TopLine="197"/>
+      </Position15>
+      <Position16>
+        <Filename Value="uLightPath.pas"/>
+        <Caret Line="210" Column="12" TopLine="201"/>
+      </Position16>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

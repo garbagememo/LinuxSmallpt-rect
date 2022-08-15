@@ -30,7 +30,7 @@ interface
 uses
   LCLIntf, LCLType,
   Classes, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,LMessages,
-  SysUtils, uVect,uModel,uScene,uQuat,uFlux;
+  SysUtils, uVect,uModel,uScene,uQuat,uFlux,uLightPath;
 
 const
   MSG_NEWLINE         = WM_USER + 0;
@@ -217,6 +217,7 @@ begin
         0:RenderThread.Flx:=TFluxClass.Create;
         1:RenderThread.Flx:=TNEEFluxClass.Create;
         2:RenderThread.Flx:=TLoopFluxClass.Create;
+        3:RenderThread.Flx:=TLightPathFluxClass.Create;
         else RenderThread.Flx:=TFluxClass.Create;
       end;
 
