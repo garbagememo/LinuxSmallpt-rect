@@ -17,7 +17,6 @@ const
 type
 
   VertexRecord=record
-    isActive:boolean;(*当面Sphere以外実装できないので・・・*)
     cf:VecRecord;
     p,n:VecRecord;
     rad2:real;

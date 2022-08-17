@@ -30,7 +30,8 @@ interface
 uses
   LCLIntf, LCLType,
   Classes, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,LMessages,
-  SysUtils, uVect,uModel,uScene,uQuat,uFlux,uLightPath;
+  SysUtils, uVect,uModel,uScene,uQuat,uFlux,uLightPath,
+  getopts;
 
 const
   MSG_NEWLINE         = WM_USER + 0;
@@ -40,6 +41,16 @@ const
   PathSeparator     = '/';(*IF Windows THEN \*)
 
 type
+  FluxOptionRecord=record
+    w,h,samps:integer;
+    AlgolID,ModelID:integer;
+    OutFN:string;
+    DefaultOutFileName:string;
+    procedure Setup(w_,h_,samp_,Algol,Model:integer;OFN:string);
+    function OutFileName:string;
+  end;
+
+  
   { TRenderThread }
 
   TLineBuffer=array[0..1980] of VecRecord;
@@ -98,10 +109,11 @@ type
     MinimamHeight:integer;
   public
     ThreadNum:integer;
-    samps:integer;
+    FluxOpt:FluxOptionRecord;
     StartTime:Int64;
     ThreadList:TList;
     yAxis:integer;
+    isRun:boolean;
     procedure RenderSetup;
     function isAllDone:boolean;
     function GetYAxis:integer;
@@ -160,23 +172,66 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 var
   i:integer;
+  c:char;
+  ArgInt:integer;
+  ArgFN:string;
 begin
-    DoubleBuffered := TRUE;
-    TOP:=10;
-    Left:=10;
-    SRList.InitSceneRecord(320,240);
-    for i:=0 to SRList.MaxIndex do
-      SceneCombo.Items.Add(SRList.SRL[i].SceneName);
-    SceneCombo.ItemIndex:=1;
-    ModelIndex:=1;
-    AlgolCombo.Items.Add('Original');
-    AlgolCombo.Items.Add('Next Event');
-    AlgolCombo.Items.Add('Non Loop');
-    AlgolCombo.Items.Add('LightPath');
-    AlgolCombo.ItemIndex:=1;
-    AlgolIndex:=1;
-    MinimamHeight:=Height;
-    Randomize;
+  isRun:=false;
+  DoubleBuffered := TRUE;
+  TOP:=10;
+  Left:=10;
+  SRList.InitSceneRecord(320,240);
+  for i:=0 to SRList.MaxIndex do
+    SceneCombo.Items.Add(SRList.SRL[i].SceneName);
+  SceneCombo.ItemIndex:=1;
+  ModelIndex:=1;
+  AlgolCombo.Items.Add('Original');
+  AlgolCombo.Items.Add('Next Event');
+  AlgolCombo.Items.Add('Non Loop');
+  AlgolCombo.Items.Add('LightPath');
+  AlgolCombo.ItemIndex:=1;
+  AlgolIndex:=1;
+  MinimamHeight:=Height;
+  Randomize;
+  FluxOpt.Setup(320,240,16,AlgolIndex,ModelIndex,'out.png');
+  c:=#0;
+  repeat
+    c:=getopt('m:o:a:s:w:r');
+    case c of
+      'r':begin
+            isRun:=true;
+          end;
+      'm': begin
+             ArgInt:=StrToInt(OptArg);
+             FluxOpt.ModelId:=ArgInt;
+           end;
+      'a': begin
+             ArgInt:=StrToInt(OptArg);
+             FluxOpt.AlgolID:=ArgInt;
+             if (ArgInt>3) or (ArgInt<0) then FluxOpt.AlgolID:=0;
+           end;
+      'o': begin
+             ArgFN:=OptArg;
+             if ArgFN<>'' then FluxOpt.OutFN:=ArgFN;
+           end;
+      's': begin
+             ArgInt:=StrToInt(OptArg);
+             FluxOpt.samps:=ArgInt;
+           end;
+      'w': begin
+             ArgInt:=StrToInt(OptArg);
+             FluxOpt.w:=ArgInt;FluxOpt.h:=FluxOpt.w *3 div 4;
+           end;
+    end; { case }
+  until c=endofoptions;
+  //  height:=FluxOpt.h;
+  if isRun then begin
+    FluxOpt.OutFN:='';//空白にする事で出力ファイル名を自動的に決める形に
+    RenderSetup;
+    for i:=0 to ThreadList.Count-1 do begin
+      TRenderThread(ThreadList[i]).Start;
+    end;
+  end;
 end;
 
 procedure TMainForm.SaveDlgClick(Sender: TObject);
@@ -194,10 +249,14 @@ begin
       ThreadList.Destroy;
    end;
 
-   imgRender.Width := strtoint(strWidth.Text);
-   imgRender.Height := strtoint(strHeight.Text);
-   ThreadNum:=StrToInt(StrThreadCount.Text);
-   samps:=StrToInt(StrSampleCount.Text);
+   if isRun=false then 
+     FluxOpt.setup(imgRender.Width,imgRender.Height,
+                   StrToInt(StrSampleCount.text),
+                   AlgolIndex,ModelIndex,'out.png');
+   
+   imgRender.Width := FluxOpt.w;
+   imgRender.Height := FluxOpt.h;
+   ThreadNum:=FluxOpt.samps;
    //add
    imgRender.Picture.Bitmap.Width:=imgRender.Width;
    imgRender.Picture.Bitmap.Height:=imgRender.Height;
@@ -208,12 +267,13 @@ begin
    cmdRender.Enabled:=false;
    ClientWidth := imgRender.Left + 5 + imgRender.Width;
    if (ImgRender.Top+5+ImgRender.Height) >MinimamHeight then
-      ClientHeight := imgRender.Top + 5 + imgRender.Height;
+     ClientHeight := imgRender.Top + 5 + imgRender.Height;
+
    ThreadList:=TList.Create;
    yAxis:=-1;
    for i:=0 to ThreadNum-1 do begin
       RenderThread:=TRenderThread.Create(true);
-      case AlgolIndex of
+      case FluxOpt.AlgolID of
         0:RenderThread.Flx:=TFluxClass.Create;
         1:RenderThread.Flx:=TNEEFluxClass.Create;
         2:RenderThread.Flx:=TLoopFluxClass.Create;
@@ -224,18 +284,17 @@ begin
       // True parameter it doesnt start automatically
       if Assigned(RenderThread.FatalException) then
         raise RenderThread.FatalException;
-      RenderThread.wide:=imgRender.Width;
-      RenderThread.h:=imgRender.Height;
-      RenderThread.samps:=StrToInt(StrSampleCount.text);
+      RenderThread.wide:=FluxOpt.w;
+      RenderThread.h:=FluxOpt.h;
+      RenderThread.samps:=FluxOpt.samps;
       RenderThread.yRender:=GetYAxis;
       RenderThread.DoneCalc:=false;
       ThreadList.Add(RenderThread);
    end;
-   StartTime:=GetTickCount64; 
+   StartTime:=GetTickCount64;
 end;
 procedure TMainForm.cmdRenderClick(Sender: TObject);
 var
-  RenderThread: TRenderThread;
   i:integer;
 begin
    RenderSetup;
@@ -265,9 +324,9 @@ end;
 
 procedure TRenderThread.InitRend;
 begin
-   Flx.mdl:=SRList.DeepCopyModel(MainForm.ModelIndex);
+   Flx.mdl:=SRList.DeepCopyModel(MainForm.FluxOpt.ModelID);
    Flx.cam:=SRList.SRL[MainForm.ModelIndex].cam;
-   Flx.cam.ReWidth(wide);
+   Flx.cam.ReWidth(MainForm.FluxOpt.w);
 end;
 
 procedure TRenderThread.DoRend;
@@ -294,11 +353,11 @@ var
    st : string;
 begin
    if MainForm.isAllDone then begin
-      MainForm.yAxis:=-1;
-      MainForm.cmdRender.Enabled:=TRUE;
-      MainForm.Caption:='TRenderThread Time: '+FormatDateTime('YYYY-MM-DD HH:NN:SS',Now);
-      
-     MainForm.imgRender.Picture.SaveToFile(DefaultSaveFile); 
+     MainForm.yAxis:=-1;
+     MainForm.cmdRender.Enabled:=TRUE;
+     MainForm.Caption:='TRenderThread Time: '+FormatDateTime('YYYY-MM-DD HH:NN:SS',Now);
+     MainForm.imgRender.Picture.SaveToFile(MainForm.FluxOpt.OutFileName);
+     if MainForm.isRun then halt;
   end;
 end;
 
@@ -348,6 +407,28 @@ begin
   inherited Create(CreateSuspended);
 end;
 
+procedure FluxOptionRecord.Setup(w_,h_,samp_,Algol,Model:integer;OFN:string);
+begin
+  DefaultOutFileName:='out.png';
+  w:=w_;h:=h_;samps:=samp_;AlgolID:=Algol;ModelID:=Model;
+  OutFN:=OFN;
+end;
+function FluxOptionRecord.OutFileName:string;
+var
+  AlgolStr:string;
+begin
+  if OutFN<>'' then begin
+    result:=OutFN;
+  end
+  else begin
+    AlgolStr:='Org';
+    if AlgolID=0 then AlgolStr:='ORG';
+    if AlgolID=1 then AlgolStr:='NEE';
+    if AlgolID=2 then AlgolStr:='Loop';
+    if AlgolID=3 then AlgolStr:='LP';
+    result:='M'+IntToStr(ModelID)+AlgolStr+DefaultOutFileName;
+  end;
+end;
 
 
 begin
