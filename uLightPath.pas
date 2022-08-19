@@ -207,10 +207,7 @@ var
         sw:=VecNorm(tVert.p-x);
         tRay.d:=sw;tRay.o:=x;
         if sw*nl<0 then continue;//裏側につきぬけないように
-        if intersect(tRay,t,id)=false then begin
-          write('t=',t:8:2);write('交点は');VecWriteln(tRay.o+tRay.d*t);
-          continue;
-        end;
+        if intersect(tRay,t,id)=false then continue;
         if id<>tVert.id then CONTINUE;//影がある?
         ts:=sw*tVert.n;
         if ts<0 then ts:=-ts;//球の表裏で変わるので・・・・
