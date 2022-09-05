@@ -250,7 +250,7 @@ begin
    end;
 
    if isRun=false then 
-     FluxOpt.setup(imgRender.Width,imgRender.Height,
+     FluxOpt.setup(StrToInt(StrWidth.text),StrToInt(StrHeight.text),
                    StrToInt(StrSampleCount.text),
                    AlgolIndex,ModelIndex,'out.png');
    
