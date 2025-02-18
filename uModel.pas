@@ -132,7 +132,7 @@ implementation
 
 function uvwVecGet(const l:VecRecord):uvwVecRecord;inline;
 begin
-  result.w:=l;
+  result.w:=VecNorm(l);
   if abs(result.w.x)>0.1 then
     result.u:=VecNorm(CreateVec(0,1,0)/result.w) 
   else
